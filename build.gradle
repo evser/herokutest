@@ -1,0 +1,67 @@
+buildscript {
+	ext {
+		springBootVersion = '1.+'
+	}
+	repositories {
+    	mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'spring-boot' 
+apply plugin: 'war'
+
+war {
+	baseName = 'cloud-agg-webapp'
+	version = '0.0.1-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+	
+	compile group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.1.1'
+	compile group: 'org.hsqldb', name: 'hsqldb', version: '2.3.4'
+	compile group: 'commons-io', name: 'commons-io', version: '2.5'
+	
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-configuration-processor')
+	compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.6.1')
+	
+	compile('javax.servlet:jstl')
+	
+	compile('tomcat:jasper-compiler:5.+')
+	compile('tomcat:jasper-runtime:5.+')
+	compile('tomcat:jasper-compiler-jdt:5.+')
+	
+	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
+
+    testCompile 'junit:junit:4.12'
+}
+
+configurations {
+    all*.exclude group: '', module: 'servlet-api'
+}
+
+eclipse {
+	classpath {
+		 downloadJavadoc = true
+	//	 containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+//		 containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+		//defaultOutputDir = file("$buildDir/classes/main/")
+	}
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.9'
+}
